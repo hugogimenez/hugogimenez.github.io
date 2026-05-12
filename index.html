@@ -1,441 +1,1030 @@
 <!DOCTYPE html>
-<html lang="pt-br">
-
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/static/Bootstrap/css/bootstrap.css">
-    <link rel="icon" type="image/png" href="/static/img/favicon.png">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="/static/style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hugo Gimenez · Security Engineer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0a0c10;
+      --surface: #111318;
+      --surface2: #181c24;
+      --border: #1e2433;
+      --accent: #00e5ff;
+      --accent2: #7c3aed;
+      --text: #e2e8f0;
+      --muted: #64748b;
+      --danger: #f43f5e;
+      --green: #10b981;
+    }
 
-    <title>Hugo Gimenez</title>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Syne', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    /* ── GRID NOISE OVERLAY ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(0,229,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,229,255,0.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.25rem 3rem;
+      background: rgba(10,12,16,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.85rem;
+      color: var(--accent);
+      letter-spacing: 0.1em;
+    }
+
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--muted);
+      text-decoration: none;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--accent); }
+
+    /* ── SECTIONS ── */
+    section { position: relative; z-index: 1; }
+
+    /* ── HERO ── */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 8rem 3rem 4rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .hero-inner { max-width: 700px; }
+
+    .hero-tag {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--accent);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .hero-tag::before {
+      content: '';
+      width: 2rem;
+      height: 1px;
+      background: var(--accent);
+    }
+
+    h1 {
+      font-size: clamp(3rem, 8vw, 5.5rem);
+      font-weight: 800;
+      line-height: 1;
+      letter-spacing: -0.02em;
+      margin-bottom: 1rem;
+    }
+
+    .hero-role {
+      font-family: 'Space Mono', monospace;
+      font-size: 1rem;
+      color: var(--muted);
+      margin-bottom: 2rem;
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .hero-role span {
+      color: var(--accent);
+      border: 1px solid var(--accent);
+      padding: 0.2rem 0.75rem;
+      font-size: 0.75rem;
+    }
+
+    .hero-desc {
+      font-size: 1.1rem;
+      color: #94a3b8;
+      line-height: 1.8;
+      max-width: 560px;
+      margin-bottom: 3rem;
+    }
+
+    .hero-cta {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary-custom {
+      background: var(--accent);
+      color: #000;
+      padding: 0.85rem 2rem;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.2s;
+      display: inline-block;
+    }
+    .btn-primary-custom:hover { opacity: 0.85; transform: translateY(-2px); }
+
+    .btn-ghost {
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 0.85rem 2rem;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.8rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: border-color 0.2s, color 0.2s;
+      display: inline-block;
+    }
+    .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* ── ABOUT ── */
+    #about {
+      padding: 6rem 3rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--accent);
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      margin-bottom: 3rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .section-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+
+    .about-text h2 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 1.5rem;
+    }
+
+    .about-text p {
+      color: #94a3b8;
+      line-height: 1.9;
+      margin-bottom: 1rem;
+      font-size: 0.95rem;
+    }
+
+    .about-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+    }
+
+    .stat-box {
+      background: var(--surface);
+      padding: 2rem;
+      text-align: center;
+    }
+
+    .stat-num {
+      font-family: 'Space Mono', monospace;
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--accent);
+      display: block;
+      line-height: 1;
+      margin-bottom: 0.5rem;
+    }
+
+    .stat-label {
+      font-size: 0.8rem;
+      color: var(--muted);
+      letter-spacing: 0.05em;
+    }
+
+    /* ── SKILLS ── */
+    #skills {
+      padding: 6rem 3rem;
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .skills-inner { max-width: 1100px; margin: 0 auto; }
+
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      margin-top: 3rem;
+    }
+
+    .skill-card {
+      background: var(--surface2);
+      padding: 2rem;
+      transition: background 0.2s;
+    }
+    .skill-card:hover { background: #1e2433; }
+
+    .skill-card-icon {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .skill-card h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+      color: var(--text);
+    }
+
+    .skill-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
+
+    .tag {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.65rem;
+      padding: 0.2rem 0.6rem;
+      background: rgba(0,229,255,0.07);
+      border: 1px solid rgba(0,229,255,0.2);
+      color: var(--accent);
+      letter-spacing: 0.05em;
+    }
+
+    .tag.purple {
+      background: rgba(124,58,237,0.07);
+      border-color: rgba(124,58,237,0.3);
+      color: #a78bfa;
+    }
+
+    .tag.green {
+      background: rgba(16,185,129,0.07);
+      border-color: rgba(16,185,129,0.3);
+      color: var(--green);
+    }
+
+    /* ── EXPERIENCE ── */
+    #experience {
+      padding: 6rem 3rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .timeline { margin-top: 3rem; }
+
+    .timeline-item {
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      gap: 3rem;
+      padding: 2.5rem 0;
+      border-bottom: 1px solid var(--border);
+      position: relative;
+    }
+
+    .timeline-item:last-child { border-bottom: none; }
+
+    .timeline-date {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--muted);
+      padding-top: 0.25rem;
+    }
+
+    .timeline-date .company {
+      display: block;
+      color: var(--accent);
+      margin-bottom: 0.25rem;
+      font-weight: 700;
+    }
+
+    .timeline-content h3 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+    }
+
+    .timeline-content p {
+      font-size: 0.9rem;
+      color: #94a3b8;
+      line-height: 1.8;
+      margin-bottom: 1rem;
+    }
+
+    .timeline-content ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .timeline-content ul li {
+      font-size: 0.85rem;
+      color: #64748b;
+      padding-left: 1rem;
+      position: relative;
+    }
+
+    .timeline-content ul li::before {
+      content: '›';
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+    }
+
+    /* ── PORTFOLIO ── */
+    #portfolio {
+      padding: 6rem 3rem;
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+    }
+
+    .portfolio-inner { max-width: 1100px; margin: 0 auto; }
+
+    .portfolio-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      margin-top: 3rem;
+    }
+
+    .project-card {
+      background: var(--surface2);
+      padding: 2.5rem;
+      transition: background 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .project-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .project-card:hover { background: #1a1f2e; }
+    .project-card:hover::before { opacity: 1; }
+
+    .project-card-tag {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.65rem;
+      color: var(--muted);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+
+    .project-card h3 {
+      font-size: 1.15rem;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+    }
+
+    .project-card p {
+      font-size: 0.875rem;
+      color: #64748b;
+      line-height: 1.7;
+      margin-bottom: 1.5rem;
+    }
+
+    .project-links {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .project-link {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--accent);
+      text-decoration: none;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      border-bottom: 1px solid transparent;
+      padding-bottom: 2px;
+      transition: border-color 0.2s;
+    }
+
+    .project-link:hover { border-color: var(--accent); }
+
+    .project-wip {
+      opacity: 0.4;
+      border: 1px dashed var(--border);
+      background: transparent;
+    }
+
+    .project-wip::before { display: none; }
+
+    .wip-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 1rem;
+    }
+
+    /* ── CERTIFICATIONS ── */
+    #certifications {
+      padding: 6rem 3rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .certs-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1rem;
+      margin-top: 3rem;
+    }
+
+    .cert-item {
+      border: 1px solid var(--border);
+      padding: 1.5rem;
+      background: var(--surface);
+      transition: border-color 0.2s;
+    }
+
+    .cert-item:hover { border-color: var(--accent); }
+
+    .cert-item.in-progress {
+      border-color: rgba(124,58,237,0.4);
+      background: rgba(124,58,237,0.04);
+    }
+
+    .cert-name {
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+    }
+
+    .cert-issuer {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--muted);
+    }
+
+    .cert-badge {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.6rem;
+      color: #a78bfa;
+      letter-spacing: 0.1em;
+      margin-top: 0.5rem;
+    }
+
+    /* ── CONTACT ── */
+    #contact {
+      padding: 6rem 3rem;
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+    }
+
+    .contact-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+
+    .contact-text h2 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 1rem;
+    }
+
+    .contact-text p {
+      color: #64748b;
+      line-height: 1.8;
+      margin-bottom: 2rem;
+      font-size: 0.95rem;
+    }
+
+    .contact-links { display: flex; flex-direction: column; gap: 0.75rem; }
+
+    .contact-link {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.8rem;
+      color: var(--muted);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      transition: color 0.2s;
+    }
+
+    .contact-link:hover { color: var(--accent); }
+
+    .contact-link span:first-child {
+      color: var(--accent);
+      width: 80px;
+    }
+
+    .contact-form { display: flex; flex-direction: column; gap: 1rem; }
+
+    .form-field {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .form-field label {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .form-field input,
+    .form-field textarea {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 0.85rem 1rem;
+      font-family: 'Syne', sans-serif;
+      font-size: 0.9rem;
+      outline: none;
+      transition: border-color 0.2s;
+      resize: vertical;
+    }
+
+    .form-field input:focus,
+    .form-field textarea:focus { border-color: var(--accent); }
+
+    /* ── FOOTER ── */
+    footer {
+      padding: 2rem 3rem;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    footer p {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--muted);
+    }
+
+    /* ── ANIMATIONS ── */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .fade-up.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      nav { padding: 1rem 1.5rem; }
+      .nav-links { display: none; }
+      #hero, #about, #skills, #experience, #portfolio, #certifications, #contact { padding: 4rem 1.5rem; }
+      .about-grid, .contact-inner { grid-template-columns: 1fr; gap: 2rem; }
+      .timeline-item { grid-template-columns: 1fr; gap: 0.5rem; }
+      .about-stats { grid-template-columns: 1fr 1fr; }
+      footer { flex-direction: column; gap: 0.5rem; text-align: center; }
+    }
+  </style>
 </head>
-
 <body>
-    <i class="bi bi-list menu-mobile"></i>
 
-    <aside id="header">
-        <section class="profile">
-            <img src="/static/img/Profile-menu.jpg" alt="Foto de perfil">
-            <h1>Hugo Gimenez</h1>
-            <div class="social-links mt-4 text-center">
-                <a target="_blank" href="https://www.linkedin.com/in/hugo-gimenez-99457733/">
-                    <i class="bi bi-linkedin"></i>
-                </a>
-                <a target="_blank" href="https://github.com/hugogimenez">
-                    <i class="bi bi-github"></i>
-                </a>
-            </div>
-        </section>
-        <nav id="navbar" class="nav-menu">
-            <ul class="nav flex-column">
-                <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="#inicio"><i class="bi bi-house"></i>Início</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#sobre"><i class="bi bi-person"></i>Sobre</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#habilidades"><i class="bi bi-list-check"></i>Habilidades</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#curriculo"><i class="bi bi-file-earmark"></i>Currículo</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#portifolio"><i class="bi bi-collection"></i>Portifólio</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#contato"><i class="bi bi-envelope"></i>Contato</a>
-                </li>
-            </ul>
-        </nav>
-    </aside>
+  <!-- NAV -->
+  <nav>
+    <span class="nav-logo">HG://portfolio</span>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#experience">Experience</a></li>
+      <li><a href="#portfolio">Projects</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
 
-    <main id="main">
-        <section id="inicio" class="row m-0 p-0">
-            <div class="col-md-5 d-flex justify-content-center align-items-center flex-column">
-                <h2 class="text-white text-shadow">Hugo Gimenez</h2>
-                <span id="subtitle" class="text-white text-shadow">Desenvolvedor Front-end</span>
-            </div>
-            <!-- <div class="col-md-7 d-flex justify-content-end align-items-end">
-                <div id="arraste" class="d-flex align-items-center">
-                    <i class="bi bi-arrow-down text-white pe-2 fs-2"></i>
-                    <a href="#sobre">Arraste para mais</a>
-                </div>
-            </div> -->
-        </section>
-        <section class="container mt-5" id="sobre">
-            <div class="row w-100">
-                <div class="col-m-12" data-anime="down">
-                    <h2 class="pt-3">Sobre</h2>
-                    <p>Sempre fui apaixonado por tecnologia, trabalhei quase uma década em uma das maiores empresas de telecomunicações do país. Neste período, juntamente com a conclusão de um curso técnico e o início da minha primeira graduação desenvolvi um vasto conhecimento em lógica de programação, funcionamento das redes de comunicação, trabalho em equipe e entrega de resultados.</p>
-                </div>
-            </div>
-            <div class="row mt-4">
-                <div class="col-md-4">
-                    <img class="img-fluid shadow" src="/static/img/Profile.jpeg" alt="Foto de perfil" data-anime="left">
-                </div>
-                <div class="col-md-8" data-anime="right">
-                    <p>Movido por novos desafios decidi criar a minha própria empresa onde fiquei por três anos exercitando diversas habilidades como gestão, relacionamento com os clientes e resolução de problemas. Atualmente trabalho como motorista e estudo. </p>
-                    <div class="row mt-3 mb-3">
-                        <div class="col-md-6">
-                            <ul class="list-group list-group-flush fs-5">
-                                <li class="list-group-item">Nascimento: <span class="fw-lighter">08 de Junho de 1991</span></li>
-                                <li class="list-group-item">Idade: <span class="fw-lighter">32 anos</span></li>
-                            </ul>
-                        </div>
-                        <div class="col-md-6">
-                            <ul class="list-group list-group-flush fs-5">
-                                <li class="list-group-item">Cidade: <span class="fw-lighter">Contagem</span></li>
-                                <li class="list-group-item">Estado: <span class="fw-lighter">Minas Gerais</span></li>
-                            </ul>
-                        </div>
-                        <h3 class="mt-5">Desenvolvedor Front-end</h3>
-                        <p>Meu objetivo é atuar e construir minha carreira como desenvolvedor. Tenho estudado tecnologias como HTML, CSS, JavaScript, Bootstrap e React. Planejo me especializar em Front-end à princípio e aos poucos estudar e entender alguns conceitos também de Back-end para me especializar nesta área também no futuro.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-        <section class="mt-5 section-bg" id="habilidades">
-            <div class="container pb-5">
-                <h2 class="pt-5">Habilidades</h2>
-                <p>Em toda minha trajetória profissional adquiri diversas habilidades, abaixo decidi colocar as que julgo mais importantes juntamente com a nível de conhecimento que acredito ter em cada uma delas.</p>
-                <div class="row">
-                    <div class="col-md-6">
-                        <p class="mt-3 mb-0">Lógica de programação</p>
-                        <div class="progress" role="progressbar" aria-label="Example with label" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
-                            <div class="progress-bar" data-anime="left" style="width: 90%">Ótimo
-                            </div>
-                        </div>
-                        <p class="mt-3 mb-0">Fundamentos de redes de computadores</p>
-                        <div class="progress" role="progressbar" aria-label="Example with label" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
-                            <div class="progress-bar" data-anime="left" style="width: 90%">Ótimo
-                            </div>
-                        </div>
-                        <p class="mt-3 mb-0">Figma</p>
-                        <div class="progress" role="progressbar" aria-label="Example with label" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
-                            <div class="progress-bar" data-anime="left" style="width: 70%">Bom
-                            </div>
-                        </div>
-                        <p class="mt-3 mb-0">React</p>
-                        <div class="progress" role="progressbar" aria-label="Example with label" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
-                            <div class="progress-bar" data-anime="left" style="width: 20%">Principiante
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <p class="mt-3 mb-0">HTML</p>
-                        <div class="progress" role="progressbar" aria-label="Example with label" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
-                            <div class="progress-bar" data-anime="left" style="width: 70%">Bom
-                            </div>
-                        </div>
-                        <p class="mt-3 mb-0">CSS</p>
-                        <div class="progress" role="progressbar" aria-label="Example with label" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
-                            <div class="progress-bar" data-anime="left" style="width: 70%">Bom
-                            </div>
-                        </div>
-                        <p class="mt-3 mb-0">Bootstrap</p>
-                        <div class="progress" role="progressbar" aria-label="Example with label" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
-                            <div class="progress-bar" data-anime="left" style="width: 70%">Bom
-                            </div>
-                        </div>
-                        <p class="mt-3 mb-0">JavaScript</p>
-                        <div class="progress" role="progressbar" aria-label="Example with label" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
-                            <div class="progress-bar" data-anime="left" style="width: 40%">Regular
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <hr class="w-50 me-auto ms-auto">
-                <div class="row">
-                    <div class="col-md-6">
-                        <p class="mt-3 mb-0">Comprometimento</p>
-                        <div class="progress" role="progressbar" aria-label="Example with label" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
-                            <div class="progress-bar" data-anime="left" style="width: 100%">Excelente
-                            </div>
-                        </div>
-                        <p class="mt-3 mb-0">Trabalho em equipe</p>
-                        <div class="progress" role="progressbar" aria-label="Example with label" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
-                            <div class="progress-bar" data-anime="left" style="width: 70%">Ótimo
-                            </div>
-                        </div>
-                        <p class="mt-3 mb-0">Resolução de problemas</p>
-                        <div class="progress" role="progressbar" aria-label="Example with label" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
-                            <div class="progress-bar" data-anime="left" style="width: 100%">Excelente
-                            </div>
-                        </div>
-                        <p class="mt-3 mb-0">Comunicação</p>
-                        <div class="progress" role="progressbar" aria-label="Example with label" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
-                            <div class="progress-bar" data-anime="left" style="width: 50%">Bom
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <p class="mt-3 mb-0">Colaboratividade</p>
-                        <div class="progress" role="progressbar" aria-label="Example with label" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
-                            <div class="progress-bar" data-anime="left" style="width: 70%">Ótimo
-                            </div>
-                        </div>
-                        <p class="mt-3 mb-0">Vontade de aprender</p>
-                        <div class="progress" role="progressbar" aria-label="Example with label" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
-                            <div class="progress-bar" data-anime="left" style="width: 100%">Excelente
-                            </div>
-                        </div>
-                        <p class="mt-3 mb-0">Foco</p>
-                        <div class="progress" role="progressbar" aria-label="Example with label" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
-                            <div class="progress-bar" data-anime="left" style="width: 70%">Ótimo
-                            </div>
-                        </div>
-                        <p class="mt-3 mb-0">Proatividade</p>
-                        <div class="progress" role="progressbar" aria-label="Example with label" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
-                            <div class="progress-bar" data-anime="left" style="width: 70%">Ótimo
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-        <section class="mt-5 cv" id="curriculo">
-            <div class="container pb-5">
-                <h2 class="pt-3 pb-4">Currículo</h2>
-                <div class="row">
-                    <div class="col-md-6">
-                        <h3 class="cv-title">Educação</h3>
-                        <div class="cv-item" data-anime="up">
-                            <h4>Análise e Desenvolvimento de Sistemas</h4>
-                            <h5>2023 - 2025(previsão de término)</h5>
-                            <p><em>Descomplica Faculdade Digital</em></p>
-                            <p>Curso focado em desenvolvimento de sistemas, a grade desta instituição está bem atualizada com as tecnologias mais utilizadas no momento, motivo pelo qual escolhi a mesma</p>
-                        </div>
-                        <div class="cv-item" data-anime="up">
-                            <h4>Engenharia Eletrônia e de Telecomunicações</h4>
-                            <h5>2013 - 2016 (trancado)</h5>
-                            <p><em>PUC</em></p>
-                            <p>Tive diversas diciplinas envolvendo matemática e física que juntamente com as diciplina Programação I e II me deram uma ótima base de lógica computacional</p>
-                        </div>
-                        <div class="cv-item" data-anime="up">
-                            <h4>Técnico em Redes de Computadores</h4>
-                            <h5>2010 - 2011</h5>
-                            <p><em>Senac</em></p>
-                            <p>Neste curso adquiri competências para 
-                                atuar para implantar, configurar, 
-                                administrar e monitorar redes locais 
-                                de computadores, implementando 
-                                soluções para garantir a segurança 
-                                e o seu funcionamento, prestando 
-                                serviço remoto ou presencial para 
-                                usuários e servidores das plataformas</p>
-                        </div>
-                        <div class="cv-item" data-anime="up">
-                            <h4>Curso de inglês avançado</h4>
-                            <h5>2018 - 2019</h5>
-                            <p><em>Uptime Escola de Idiomas</em></p>
-                            <p>Curso de nível avançado com 3 encontros semanais focados em conversação</p>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <h3 class="cv-title">Profissional</h3>
-                        <div class="cv-item" data-anime="up">
-                            <h4>Proprietário</h4>
-                            <h5>2020 - 2023</h5>
-                            <p><em>Nativo Indústria e Comércio de Gelados</em></p>
-                            <ul>
-                                <li>
-                                    Atuava na gestão dos funcionários, compras e
-                                    relacionamento com fornecedores e controle
-                                    financeiro.
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="cv-item" data-anime="up">
-                            <h4>Analista de Telecomunicações</h4>
-                            <h5>2013 - 2020</h5>
-                            <p><em>Claro Brasil</em></p>
-                            <ul>
-                                <li>
-                                    Elaborava projetos para construção de redes
-                                    FO e HFC;
-                                </li>
-                                <li>
-                                    Mantinha atualizada a planta óptica do grupo
-                                    Claro (Claro, NET e Embratel) de todo o estado
-                                    de MG
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="cv-item" data-anime="up">
-                            <h4>Operador NOC(Network Operation Center)</h4>
-                            <h5>2011 - 2013</h5>
-                            <p><em>Claro Brasil</em></p>
-                            <ul>
-                                <li>
-                                    Atuava no monitoramento de rede HFC e de serviços (TV a cabo, internet e telefone), identificação de falhas e acionamento e suporte às equipes de manutenção
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
+  <!-- HERO -->
+  <section id="hero">
+    <div class="hero-inner">
+      <div class="hero-tag">Security Engineer · Blue Team</div>
+      <h1>Hugo<br>Gimenez</h1>
+      <div class="hero-role">
+        <span>Detection Engineering</span>
+        <span>Threat Hunting</span>
+        <span>Incident Response</span>
+        <span>Python</span>
+      </div>
+      <p class="hero-desc">
+        Over 10 years in telecom and network infrastructure, now applied to cybersecurity. 
+        I build detection logic, hunt threats, and turn noisy logs into actionable intelligence.
+      </p>
+      <div class="hero-cta">
+        <a href="#experience" class="btn-primary-custom">View Experience</a>
+        <a href="#contact" class="btn-ghost">Get in Touch</a>
+      </div>
+    </div>
+  </section>
 
-                </div>
-            </div>
-        </section>
-        <section class="section-bg mt-5" id="portifolio">
-            <div class="container pb-5 pt-5" data-anime="left">
-                <h2 class="pb-4">Portfolio</h2>
-                <div id="carouselPortfolio" class="carousel carousel-dark slide px-5" data-bs-ride="carousel">
-                    <!-- <div class="carousel-indicators">
-                        <button type="button" data-bs-target="#carouselPortfolio" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-                        <button type="button" data-bs-target="#carouselPortfolio" data-bs-slide-to="1" aria-label="Slide 2"></button>
-                    </div> -->
-                    <div class="carousel-inner">
-                        <div class="carousel-item active" data-bs-interval="10000">
-                            <div class="row row-cols-1 row-cols-md-3 g-4">
-                                <div class="col">
-                                    <div class="card">
-                                        <img src="/static/img/AnimaisFantasticosHome.png" class="card-img-top" alt=".">
-                                        <div class="card-body">
-                                            <h5 class="card-title">Animais Fantásticos</h5>
-                                            <p class="card-text">Projeto desenvolvido utilizando HTML, CSS e JavaScript</p>
-                                            <div class="d-flex justify-content-center">
-                                                <a href="https://github.com/hugogimenez/Animaisfantasticos" target="blank" class="btn btn-outline-dark me-3"><i class="bi bi-github"></i></a>
-                                                <a href="https://hugogimenez.github.io/animaisfantasticos/" target="blank" class="btn btn-outline-primary"><i class="bi bi-link-45deg"></i></a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col">
-                                    <div class="card">
-                                        <img src="/static/img/ToDoList.png" class="card-img-top" alt=".">
-                                        <div class="card-body">
-                                            <h5 class="card-title">To Do list</h5>
-                                            <p class="card-text">Projeto desenvolvido utilizando React e CSS</p>
-                                            <div class="d-flex justify-content-center">
-                                                <a href="https://github.com/hugogimenez/todolist" target="blank" class="btn btn-outline-dark me-3"><i class="bi bi-github"></i></a>
-                                                <a href="https://google.com.br" target="blank" class="btn btn-outline-primary"><i class="bi bi-link-45deg"></i></a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col">
-                                    <div class="card">
-                                        <img src="/static/img/Aguarde.jpg" class="card-img-top" alt=".">
-                                        <div class="card-body">
-                                            <h5 class="card-title">Em construção</h5>
-                                            <p class="card-text">Em breve um novo projeto</p>
-                                            <!-- <div class="d-flex justify-content-center">
-                                                <a href="https://github.com/hugogimenez/Animaisfantasticos" target="blank" class="btn btn-outline-dark me-3"><i class="bi bi-github"></i></a>
-                                                <a href="https://google.com.br" target="blank" class="btn btn-outline-primary"><i class="bi bi-link-45deg"></i></a>
-                                            </div> -->
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- <div class="carousel-item" data-bs-interval="2000">
-                            <div class="row row-cols-1 row-cols-md-3 g-4">
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="section-label">About</div>
+    <div class="about-grid fade-up">
+      <div class="about-text">
+        <h2>Built on networks.<br>Focused on threats.</h2>
+        <p>
+          My career started in the NOC and grew through 9 years at Claro Brasil, where I developed deep expertise in fiber optic and HFC infrastructure, BGP, routing, and large-scale network operations across Minas Gerais.
+        </p>
+        <p>
+          That foundation gave me something most security professionals don't have: I understand the infrastructure that attacks move through. When I investigate an alert, I'm not just reading logs — I'm reading the network.
+        </p>
+        <p>
+          For the past two years I've been a Security Engineer on a CSIRT team, building detection rules, investigating incidents, hunting threats, and automating SOC workflows with Python.
+        </p>
+        <p style="color: #a78bfa; font-size: 0.85rem; font-family: 'Space Mono', monospace;">
+          ◈ Currently pursuing CompTIA CySA+
+        </p>
+      </div>
+      <div class="about-stats">
+        <div class="stat-box">
+          <span class="stat-num">10+</span>
+          <span class="stat-label">Years in Tech</span>
+        </div>
+        <div class="stat-box">
+          <span class="stat-num">2+</span>
+          <span class="stat-label">Years in Security</span>
+        </div>
+        <div class="stat-box">
+          <span class="stat-num">9yr</span>
+          <span class="stat-label">Telecom / Claro</span>
+        </div>
+        <div class="stat-box">
+          <span class="stat-num">PT·EN</span>
+          <span class="stat-label">Languages</span>
+        </div>
+      </div>
+    </div>
+  </section>
 
-                                <div class="col">
-                                    <div class="card">
-                                        <img src="/static/img/AnimaisFantasticosHome.png" class="card-img-top" alt=".">
-                                        <div class="card-body">
-                                            <h5 class="card-title">Animais Fantásticos</h5>
-                                            <p class="card-text">Projeto desenvolvido utilizando HTML, CSS e JavaScript</p>
-                                            <div class="d-flex justify-content-center">
-                                                <a href="https://github.com/hugogimenez/Animaisfantasticos" target="blank" class="btn btn-outline-dark me-3"><i class="bi bi-github"></i></a>
-                                                <a href="https://google.com.br" target="blank" class="btn btn-outline-primary"><i class="bi bi-link-45deg"></i></a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col">
-                                    <div class="card">
-                                        <img src="/static/img/AnimaisFantasticosHome.png" class="card-img-top" alt=".">
-                                        <div class="card-body">
-                                            <h5 class="card-title">Animais Fantásticos</h5>
-                                            <p class="card-text">Projeto desenvolvido utilizando HTML, CSS e JavaScript</p>
-                                            <div class="d-flex justify-content-center">
-                                                <a href="https://github.com/hugogimenez/Animaisfantasticos" target="blank" class="btn btn-outline-dark me-3"><i class="bi bi-github"></i></a>
-                                                <a href="https://google.com.br" target="blank" class="btn btn-outline-primary"><i class="bi bi-link-45deg"></i></a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col">
-                                    <div class="card">
-                                        <img src="/static/img/AnimaisFantasticosHome.png" class="card-img-top" alt=".">
-                                        <div class="card-body">
-                                            <h5 class="card-title">Animais Fantásticos</h5>
-                                            <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content.</p>
-                                            <div class="d-flex justify-content-center">
-                                                <a href="https://google.com.br" target="blank" class="btn btn-outline-dark me-3"><i class="bi bi-github"></i></a>
-                                                <a href="https://google.com.br" target="blank" class="btn btn-outline-primary"><i class="bi bi-link-45deg"></i></a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselPortfolio" data-bs-slide="prev">
-                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                            <span class="visually-hidden">Previous</span>
-                        </button>
-                        <button class="carousel-control-next" type="button" data-bs-target="#carouselPortfolio" data-bs-slide="next">
-                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                            <span class="visually-hidden">Next</span>
-                        </button> -->
-                    </div>
-                </div>
-            </div>
-        </section>
-        <section class="pt-5 pb-5" id="contato">
-            <div class="container mb-5">
-                <h2 class="pt-3 pb-3">Contato</h2>
-                <div class="row">
-                    <div class="col-md-5">
-                        <div class="card p-5 shadow border-0" data-anime="up">
-                            <div class="endereco">
-                                <h4><i class="bi bi-geo-alt me-2"></i>Localização</h4>
-                                <p>Belo Horizonte, MG</p>
-                            </div>
-                            <div class="email">
-                                <h4><i class="bi bi-envelope me-2"></i>Email:</h4>
-                                <p>hugomelogimenez@gmail.com</p>
-                            </div>
-                            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3751.462335280312!2d-44.03652582460825!3d-19.90491283752814!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xa6943bf7bd26ed%3A0x7dc4fa6150a5719c!2sAv.%20Laudelina%20Alves%20de%20Faria%20-%20Colorado%2C%20Contagem%20-%20MG%2C%2032143-290!5e0!3m2!1spt-BR!2sbr!4v1694993926753!5m2!1spt-BR!2sbr" width="400" height="300" style="border:0;" allowfullscreen="" loading="lazy" class="w-100" referrerpolicy="no-referrer-when-downgrade"></iframe>
+  <!-- SKILLS -->
+  <section id="skills">
+    <div class="skills-inner">
+      <div class="section-label">Areas of Focus</div>
+      <div class="skills-grid">
+        <div class="skill-card fade-up">
+          <div class="skill-card-icon">⚙️</div>
+          <h3>Detection Engineering</h3>
+          <div class="skill-tags">
+            <span class="tag">SIEM</span>
+            <span class="tag">KQL</span>
+            <span class="tag">Sigma Rules</span>
+            <span class="tag">XDR</span>
+            <span class="tag">Use Cases</span>
+          </div>
+        </div>
+        <div class="skill-card fade-up">
+          <div class="skill-card-icon">🔍</div>
+          <h3>Threat Hunting & Analysis</h3>
+          <div class="skill-tags">
+            <span class="tag green">MITRE ATT&CK</span>
+            <span class="tag green">Log Analysis</span>
+            <span class="tag green">Threat Intel</span>
+            <span class="tag green">IOC Analysis</span>
+          </div>
+        </div>
+        <div class="skill-card fade-up">
+          <div class="skill-card-icon">🌐</div>
+          <h3>Network & Infrastructure</h3>
+          <div class="skill-tags">
+            <span class="tag">DNS</span>
+            <span class="tag">BGP</span>
+            <span class="tag">TCP/IP</span>
+            <span class="tag">HFC / FO</span>
+            <span class="tag">Routing</span>
+            <span class="tag">Firewalls</span>
+          </div>
+        </div>
+        <div class="skill-card fade-up">
+          <div class="skill-card-icon">🛡️</div>
+          <h3>Incident Response</h3>
+          <div class="skill-tags">
+            <span class="tag purple">Triage</span>
+            <span class="tag purple">Containment</span>
+            <span class="tag purple">Root Cause</span>
+            <span class="tag purple">NIST CSF</span>
+            <span class="tag purple">ISO 27001</span>
+          </div>
+        </div>
+        <div class="skill-card fade-up">
+          <div class="skill-card-icon">🐍</div>
+          <h3>Security Automation</h3>
+          <div class="skill-tags">
+            <span class="tag">Python</span>
+            <span class="tag">Bash</span>
+            <span class="tag">API Integration</span>
+            <span class="tag">SOC Automation</span>
+          </div>
+        </div>
+        <div class="skill-card fade-up">
+          <div class="skill-card-icon">🔐</div>
+          <h3>Compliance & Vuln Mgmt</h3>
+          <div class="skill-tags">
+            <span class="tag green">PCI DSS 4.0</span>
+            <span class="tag green">CIS Controls</span>
+            <span class="tag green">IAM / MFA</span>
+            <span class="tag green">LGPD</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-                        </div>
-                    </div>
-                    <div class="col-md-7 mt-5 mt-md-0">
-                        <div class="card p-5 h-100 shadow border-0" data-anime="left">
-                            <form class="row g-3">
-                                <div class="col-md-6">
-                                    <label for="nome" class="form-label">Nome</label>
-                                    <input type="text" class="form-control" id="nome" placeholder="Digite seu nome" name="nome">
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="email" class="form-label">Email:</label>
-                                    <input type="email" class="form-control" id="email" placeholder="Digite seu email" name="email">
-                                </div>
-                                <div class="col-12">
-                                    <label for="mensagem" class="form-label">Mensagem:</label>
-                                    <textarea type="text" class="form-control" rows="10" id="mensagem" placeholder="Digite sua mensagem" name="mensagem"></textarea>
-                                </div>
+  <!-- EXPERIENCE -->
+  <section id="experience">
+    <div class="section-label">Experience</div>
+    <div class="timeline">
 
-                                <div class="col-12 d-flex justify-content-center mt-4">
-                                    <button type="submit" class="btn btn-primary">Enviar mensagem</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
+      <div class="timeline-item fade-up">
+        <div class="timeline-date">
+          <span class="company">WatchGuard</span>
+          Jul 2025 – Present
+        </div>
+        <div class="timeline-content">
+          <h3>Security Engineer</h3>
+          <p>Protecting corporate environments through security monitoring, detection engineering, and incident response. Configuring and tuning SIEM and EDR platforms to increase visibility and reduce false positives.</p>
+          <ul>
+            <li>Detection rule development and tuning based on attacker techniques</li>
+            <li>Threat hunting with hypothesis-driven investigations</li>
+            <li>Python automation for SOC workflows and tool integration</li>
+            <li>Security framework alignment: NIST CSF, CIS, ISO 27001, PCI DSS 4.0</li>
+          </ul>
+        </div>
+      </div>
 
-        </section>
-    </main>
+      <div class="timeline-item fade-up">
+        <div class="timeline-date">
+          <span class="company">NowCy</span>
+          Apr 2024 – Jul 2025
+        </div>
+        <div class="timeline-content">
+          <h3>Cybersecurity Analyst</h3>
+          <p>Worked in the protection of corporate systems and networks, with expertise in vulnerability management, access management, and incident response.</p>
+          <ul>
+            <li>Firewall configuration and perimeter security management</li>
+            <li>SIEM, IDS/IPS, and XDR monitoring and log analysis</li>
+            <li>IAM implementation including MFA and provisioning automation</li>
+            <li>Vulnerability management and security awareness training</li>
+          </ul>
+        </div>
+      </div>
 
-    <script src="/static/Bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="/static/script.js"></script>
+      <div class="timeline-item fade-up">
+        <div class="timeline-date">
+          <span class="company">Claro Brasil</span>
+          2011 – 2020
+        </div>
+        <div class="timeline-content">
+          <h3>Telecom Analyst → NOC Operator</h3>
+          <p>9 years across NOC operations and large-scale network engineering. Managed fiber optic and HFC infrastructure for the Claro group (Claro, NET, Embratel) across Minas Gerais.</p>
+          <ul>
+            <li>Design and deployment of large-scale FO and HFC networks</li>
+            <li>Configuration and maintenance of routers, switches, and OLTs</li>
+            <li>NOC monitoring: fault identification, alarm analysis, field dispatch</li>
+            <li>High availability and continuity of TV, internet, and telephony services</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="timeline-item fade-up">
+        <div class="timeline-date">
+          <span class="company">Nativo Sorvetes</span>
+          2020 – 2023
+        </div>
+        <div class="timeline-content">
+          <h3>Entrepreneur</h3>
+          <p>Managed business operations including team leadership, supplier negotiation, financial control, and process optimization.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- PORTFOLIO -->
+  <section id="portfolio">
+    <div class="portfolio-inner">
+      <div class="section-label">Projects</div>
+      <div class="portfolio-grid">
+
+        <div class="project-card fade-up">
+          <div class="project-card-tag">Frontend · HTML / CSS / JS</div>
+          <h3>Animais Fantásticos</h3>
+          <p>Web project built with vanilla HTML, CSS, and JavaScript. An early showcase of frontend fundamentals and UI interaction design.</p>
+          <div class="project-links">
+            <a href="https://github.com/hugogimenez/Animaisfantasticos" target="_blank" class="project-link">GitHub →</a>
+            <a href="https://hugogimenez.github.io/animaisfantasticos/" target="_blank" class="project-link">Live →</a>
+          </div>
+        </div>
+
+        <div class="project-card fade-up">
+          <div class="project-card-tag">Frontend · React / CSS</div>
+          <h3>To Do List</h3>
+          <p>Task management app built with React. Focuses on component architecture, state management, and clean UI patterns.</p>
+          <div class="project-links">
+            <a href="https://github.com/hugogimenez/todolist" target="_blank" class="project-link">GitHub →</a>
+          </div>
+        </div>
+
+        <div class="project-card project-wip fade-up">
+          <div class="project-card-tag">Security · Python</div>
+          <h3>Security Scripts</h3>
+          <p>Detection automation, IOC enrichment, and network analysis tools. Coming soon.</p>
+          <div class="wip-label">⬡ In development</div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CERTIFICATIONS -->
+  <section id="certifications">
+    <div class="section-label">Certifications</div>
+    <div class="certs-grid">
+      <div class="cert-item in-progress fade-up">
+        <div class="cert-name">CompTIA CySA+</div>
+        <div class="cert-issuer">CompTIA</div>
+        <div class="cert-badge">◈ IN PROGRESS</div>
+      </div>
+      <div class="cert-item fade-up">
+        <div class="cert-name">Cato Certified Associate</div>
+        <div class="cert-issuer">Cato Networks</div>
+      </div>
+      <div class="cert-item fade-up">
+        <div class="cert-name">NSE 3 – Fortinet Certified Associate</div>
+        <div class="cert-issuer">Fortinet</div>
+      </div>
+      <div class="cert-item fade-up">
+        <div class="cert-name">NSE 1 & NSE 2 – Fortinet Fundamentals</div>
+        <div class="cert-issuer">Fortinet</div>
+      </div>
+      <div class="cert-item fade-up">
+        <div class="cert-name">Introduction to Hacking and Pentesting 2.0</div>
+        <div class="cert-issuer">Desec Security</div>
+      </div>
+      <div class="cert-item fade-up">
+        <div class="cert-name">Phishing Expert</div>
+        <div class="cert-issuer">Security Awareness</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="contact-inner">
+      <div class="contact-text fade-up">
+        <div class="section-label">Contact</div>
+        <h2>Let's talk<br>security.</h2>
+        <p>Open to new opportunities, collaborations, or just a good conversation about detection engineering and threat hunting.</p>
+        <div class="contact-links">
+          <a href="mailto:hugomelogimenez@gmail.com" class="contact-link">
+            <span>Email</span>
+            <span>hugomelogimenez@gmail.com</span>
+          </a>
+          <a href="https://linkedin.com/in/hugogmnz" target="_blank" class="contact-link">
+            <span>LinkedIn</span>
+            <span>linkedin.com/in/hugogmnz</span>
+          </a>
+          <a href="https://github.com/hugogimenez" target="_blank" class="contact-link">
+            <span>GitHub</span>
+            <span>github.com/hugogimenez</span>
+          </a>
+          <a href="https://hugogimenez.github.io" target="_blank" class="contact-link">
+            <span>Site</span>
+            <span>hugogimenez.github.io</span>
+          </a>
+        </div>
+      </div>
+      <div class="contact-form fade-up">
+        <div class="form-field">
+          <label>Name</label>
+          <input type="text" placeholder="Your name">
+        </div>
+        <div class="form-field">
+          <label>Email</label>
+          <input type="email" placeholder="your@email.com">
+        </div>
+        <div class="form-field">
+          <label>Message</label>
+          <textarea rows="6" placeholder="What's on your mind?"></textarea>
+        </div>
+        <button class="btn-primary-custom" style="width:100%; text-align:center;">Send Message</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>© 2026 Hugo Gimenez · Security Engineer</p>
+    <p>Belo Horizonte, MG · Brazil</p>
+  </footer>
+
+  <script>
+    // Intersection observer for fade-up animations
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry, i) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => {
+            entry.target.classList.add('visible');
+          }, (entry.target.dataset.delay || 0));
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.fade-up').forEach((el, i) => {
+      el.dataset.delay = (i % 4) * 80;
+      observer.observe(el);
+    });
+
+    // Active nav link on scroll
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('.nav-links a');
+
+    window.addEventListener('scroll', () => {
+      let current = '';
+      sections.forEach(s => {
+        if (window.scrollY >= s.offsetTop - 100) current = s.id;
+      });
+      navLinks.forEach(a => {
+        a.style.color = a.getAttribute('href') === `#${current}` ? 'var(--accent)' : '';
+      });
+    });
+  </script>
 </body>
-
 </html>
