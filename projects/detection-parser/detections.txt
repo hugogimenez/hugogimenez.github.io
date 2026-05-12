@@ -1,0 +1,27 @@
+name: Suspicious PowerShell Encoded Command
+description: Detects the use of PowerShell with Base64 encoded commands,
+  commonly used to evade detection and execute malicious payloads in memory.
+search: 'index=windows EventCode=4688
+  CommandLine="*powershell*" CommandLine="*-enc*"
+  | stats count by ComputerName, User, CommandLine'
+  confidence: 80
+  impact: 90
+
+name: Brute Force Login Attempt
+description: Multiple failed login attempts from the same source IP within
+  a short time window. May indicate credential stuffing or brute force attack.
+search: 'index=windows EventCode=4625
+  | bucket _time span=5m
+  | stats count by src_ip, _time
+  | where count > 10'
+  confidence: 70
+  impact: 75
+
+name: New Local Admin Account Created
+description: A new local administrator account was created outside of expected
+  provisioning windows. Could indicate lateral movement or persistence.
+search: 'index=windows EventCode=4720 OR EventCode=4732
+  | eval action=if(EventCode=4720,"created","added_to_group")
+  | stats count by action, TargetUserName, SubjectUserName, ComputerName'
+  confidence: 85
+  impact: 95
