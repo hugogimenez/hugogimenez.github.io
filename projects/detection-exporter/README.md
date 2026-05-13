@@ -1,53 +1,30 @@
-# hugogimenez.github.io
+detection-exporter
+A Python script that parses a detection rule library stored in a YAML-like plain text format and exports each detection's fields to a structured CSV — making it easy to audit, document, and review rules at scale without opening a SIEM.
 
-Personal portfolio and security projects by Hugo Gimenez — Security Engineer with a background in telecom and network infrastructure, now focused on detection engineering, threat hunting, and security automation.
+The Problem
+When a detection library grows to dozens or hundreds of rules, reviewing them one by one inside a SIEM becomes slow and error-prone. This script lets you dump all detections into a flat file, extract the key fields, and analyze the full library in a spreadsheet — useful for coverage reviews, documentation, and prioritization.
 
-🌐 **Live site:** [hugogimenez.github.io](https://hugogimenez.github.io)
+What it extracts
+FieldDescriptionnameDetection rule namedescriptionWhat the rule detects (multiline supported)searchThe query/search logic (multiline, within single quotes)confidenceConfidence score (0–100)impactImpact score (0–100)
 
----
+Usage
+bashpip install pandas
+python detection_exporter.py
+By default reads detections.txt and writes detections.csv.
+Edit INPUT_FILE / OUTPUT_CSV at the top of the script to change paths.
 
-## Repository Structure
+Input format
+name: Suspicious PowerShell Encoded Command
+description: Detects PowerShell with Base64 encoded commands,
+  commonly used to evade detection.
+search: 'index=windows EventCode=4688
+  CommandLine="*powershell*" CommandLine="*-enc*"'
+  confidence: 80
+  impact: 90
+Output
+name,description,search,confidence,impact
+Suspicious PowerShell Encoded Command,"Detects PowerShell...","index=windows...",80,90
 
-```
-hugogimenez.github.io/
-├── index.html                        # Portfolio site
-├── static/                           # Assets (CSS, JS, images)
-└── projects/
-    ├── detection-parser/             # Parse detection rules → CSV
-    └── ioc-enricher/                 # Enrich IOCs via threat intel APIs
-```
-
----
-
-## Security Projects
-
-### [Detection Parser](projects/detection-parser/)
-Processes a detection rule library in YAML-like format, extracts key fields (name, description, search query, confidence, impact), and exports a structured CSV for audit and coverage gap analysis.
-
-**Stack:** Python · pandas · regex
-
----
-
-### [IOC Enricher](projects/ioc-enricher/)
-Batch-enriches IOCs (IPs, domains, hashes) by querying AbuseIPDB, VirusTotal, and AlienVault OTX. Outputs a consolidated CSV with a calculated risk score per indicator.
-
-**Stack:** Python · requests · pandas
-
----
-
-### [Detection Exporter](projects/detection-exporter/)
-Parses a multi-entry YAML-like detection file and exports each detection's fields to a structured CSV. Supports multiline descriptions and search queries. Built to speed up detection library documentation.
-
-**Stack:** Python · pandas · regex
-
----
-
-## About
-
-- 🛡️ Security Engineer at WatchGuard Technologies
-- 📍 Belo Horizonte, MG — Brazil
-- 🎓 CST Cybersecurity · Senac Minas (2024–2027)
-- 📜 Currently pursuing CompTIA CySA+
-
-**Connect:**
-[LinkedIn](https://linkedin.com/in/hugogmnz) · [GitHub](https://github.com/hugogimenez) · hugomelogimenez@gmail.com
+Author
+Hugo Gimenez · Security Engineer
+linkedin.com/in/hugogmnz · github.com/hugogimenez
