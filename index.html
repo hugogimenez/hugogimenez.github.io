@@ -661,7 +661,7 @@
 
   <!-- NAV -->
   <nav>
-    <span class="nav-logo">HG://portfolio</span>
+    <a href="#hero" class="nav-logo" style="text-decoration:none;">HG:~$</a>
     <ul class="nav-links">
       <li><a href="#about">About</a></li>
       <li><a href="#skills">Skills</a></li>
@@ -700,7 +700,7 @@
       <div class="about-text">
         <h2>Built on networks.<br>Focused on threats.</h2>
         <p>
-          My career started in the NOC and grew through 9 years at Claro Brasil, where I developed deep expertise in fiber optic and HFC infrastructure, BGP, routing, and large-scale network operations across Minas Gerais.
+          My career started in the NOC and grew through 10 years in telecom, where I developed deep expertise in telecom infrastructure, routing, and large-scale network operations across Minas Gerais.
         </p>
         <p>
           That foundation gave me something most security professionals don't have: I understand the infrastructure that attacks move through. When I investigate an alert, I'm not just reading logs — I'm reading the network.
@@ -718,12 +718,12 @@
           <span class="stat-label">Years in Tech</span>
         </div>
         <div class="stat-box">
-          <span class="stat-num">2+</span>
+          <span class="stat-num">2yr</span>
           <span class="stat-label">Years in Security</span>
         </div>
         <div class="stat-box">
-          <span class="stat-num">9yr</span>
-          <span class="stat-label">Telecom / Claro</span>
+          <span class="stat-num">10yr</span>
+          <span class="stat-label">Telecom</span>
         </div>
         <div class="stat-box">
           <span class="stat-num">PT·EN</span>
@@ -743,7 +743,7 @@
           <h3>Detection Engineering</h3>
           <div class="skill-tags">
             <span class="tag">SIEM</span>
-            <span class="tag">KQL</span>
+
             <span class="tag">Sigma Rules</span>
             <span class="tag">XDR</span>
             <span class="tag">Use Cases</span>
@@ -763,8 +763,6 @@
           <div class="skill-card-icon">🌐</div>
           <h3>Network & Infrastructure</h3>
           <div class="skill-tags">
-            <span class="tag">DNS</span>
-            <span class="tag">BGP</span>
             <span class="tag">TCP/IP</span>
             <span class="tag">HFC / FO</span>
             <span class="tag">Routing</span>
@@ -883,29 +881,33 @@
       <div class="portfolio-grid">
 
         <div class="project-card fade-up">
-          <div class="project-card-tag">Frontend · HTML / CSS / JS</div>
-          <h3>Animais Fantásticos</h3>
-          <p>Web project built with vanilla HTML, CSS, and JavaScript. An early showcase of frontend fundamentals and UI interaction design.</p>
+          <div class="project-card-tag">Security · Python · Detection Engineering</div>
+          <h3>Detection Parser</h3>
+          <p>Processes a detection rule library in YAML-like format, extracts name, description, search query, confidence and impact fields, and exports a structured CSV. Built for detection audits and coverage gap analysis at scale.</p>
           <div class="project-links">
-            <a href="https://github.com/hugogimenez/Animaisfantasticos" target="_blank" class="project-link">GitHub →</a>
-            <a href="https://hugogimenez.github.io/animaisfantasticos/" target="_blank" class="project-link">Live →</a>
+            <a href="projects/detection-parser/detection_parser.py" target="_blank" class="project-link">View Script →</a>
+            <a href="projects/detection-parser/README.md" target="_blank" class="project-link">README →</a>
           </div>
         </div>
 
         <div class="project-card fade-up">
-          <div class="project-card-tag">Frontend · React / CSS</div>
-          <h3>To Do List</h3>
-          <p>Task management app built with React. Focuses on component architecture, state management, and clean UI patterns.</p>
+          <div class="project-card-tag">Security · Python · Threat Intelligence</div>
+          <h3>IOC Enricher</h3>
+          <p>Auto-detects IOC type (IP, domain, hash), queries AbuseIPDB, VirusTotal and AlienVault OTX in batch, and consolidates results into a single CSV with a calculated risk score (CRITICAL / HIGH / MEDIUM / LOW / CLEAN).</p>
           <div class="project-links">
-            <a href="https://github.com/hugogimenez/todolist" target="_blank" class="project-link">GitHub →</a>
+            <a href="projects/ioc-enricher/ioc_enricher.py" target="_blank" class="project-link">View Script →</a>
+            <a href="projects/ioc-enricher/README.md" target="_blank" class="project-link">README →</a>
           </div>
         </div>
 
-        <div class="project-card project-wip fade-up">
-          <div class="project-card-tag">Security · Python</div>
-          <h3>Security Scripts</h3>
-          <p>Detection automation, IOC enrichment, and network analysis tools. Coming soon.</p>
-          <div class="wip-label">⬡ In development</div>
+        <div class="project-card fade-up">
+          <div class="project-card-tag">Security · Python · Detection Engineering</div>
+          <h3>Detection Exporter</h3>
+          <p>Parses a multi-entry YAML-like detection file and exports each rule's fields to a structured CSV. Supports multiline descriptions and search queries. Built to speed up detection library documentation and audit.</p>
+          <div class="project-links">
+            <a href="projects/detection-exporter/detection_exporter.py" target="_blank" class="project-link">View Script →</a>
+            <a href="projects/detection-exporter/README.md" target="_blank" class="project-link">README →</a>
+          </div>
         </div>
 
       </div>
@@ -950,7 +952,7 @@
       <div class="contact-text fade-up">
         <div class="section-label">Contact</div>
         <h2>Let's talk<br>security.</h2>
-        <p>Open to new opportunities, collaborations, or just a good conversation about detection engineering and threat hunting.</p>
+        <p>Always happy to connect, collaborate, or talk about detection engineering, threat hunting, and security operations.</p>
         <div class="contact-links">
           <a href="mailto:hugomelogimenez@gmail.com" class="contact-link">
             <span>Email</span>
@@ -971,19 +973,31 @@
         </div>
       </div>
       <div class="contact-form fade-up">
-        <div class="form-field">
-          <label>Name</label>
-          <input type="text" placeholder="Your name">
+        <div data-fs-success style="display:none; font-family:'Space Mono',monospace; font-size:0.85rem; color:var(--green); border:1px solid var(--green); padding:1.25rem; margin-bottom:1rem;">
+          ✓ Message sent. I'll get back to you soon.
         </div>
-        <div class="form-field">
-          <label>Email</label>
-          <input type="email" placeholder="your@email.com">
-        </div>
-        <div class="form-field">
-          <label>Message</label>
-          <textarea rows="6" placeholder="What's on your mind?"></textarea>
-        </div>
-        <button class="btn-primary-custom" style="width:100%; text-align:center;">Send Message</button>
+        <div data-fs-error style="display:none; font-family:'Space Mono',monospace; font-size:0.8rem; color:var(--danger); border:1px solid var(--danger); padding:1rem; margin-bottom:1rem;"></div>
+
+        <form id="contact-form">
+          <div class="form-field">
+            <label for="name">Name</label>
+            <input type="text" id="name" name="name" placeholder="Your name" data-fs-field required>
+            <span data-fs-error="name" style="font-family:'Space Mono',monospace; font-size:0.7rem; color:var(--danger);"></span>
+          </div>
+          <div class="form-field" style="margin-top:1rem;">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" placeholder="your@email.com" data-fs-field required>
+            <span data-fs-error="email" style="font-family:'Space Mono',monospace; font-size:0.7rem; color:var(--danger);"></span>
+          </div>
+          <div class="form-field" style="margin-top:1rem;">
+            <label for="message">Message</label>
+            <textarea id="message" name="message" rows="6" placeholder="What's on your mind?" data-fs-field required></textarea>
+            <span data-fs-error="message" style="font-family:'Space Mono',monospace; font-size:0.7rem; color:var(--danger);"></span>
+          </div>
+          <button type="submit" data-fs-submit-btn class="btn-primary-custom" style="width:100%; text-align:center; margin-top:1.25rem; cursor:pointer;">
+            Send Message
+          </button>
+        </form>
       </div>
     </div>
   </section>
@@ -1026,5 +1040,11 @@
       });
     });
   </script>
+  <script>
+    window.formspree = window.formspree || function () { (formspree.q = formspree.q || []).push(arguments); };
+    formspree('initForm', { formElement: '#contact-form', formId: 'xaqvkeed' });
+  </script>
+  <script src="https://unpkg.com/@formspree/ajax@1" defer></script>
+
 </body>
 </html>
